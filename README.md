@@ -198,7 +198,7 @@ Obliczam odchylenie standardowe
 >sd(y)
 
 ### Zadanie 2
-W pliku samochody.csv (UBI) zamieszczono dane dotyczące parametrów samochodów kilku wybranych marek. 
+*W pliku samochody.csv (UBI) zamieszczono dane dotyczące parametrów samochodów kilku wybranych marek.*
 
 Sprawdzam ścieżkę do katalogu roboczego
 > getwd()
@@ -207,4 +207,100 @@ Ewentualnie zmiana ścieżki to
 > setwd()
 
 #### a)
+*Wczytaj dane z pliku do ramki danych – funkcja read.csv2(). Podaj rozmiar ramki danych (liczba obserwacji i liczba zmiennych) – funkcja dim().*
 
+Wczytuje dane do obiektu auta
+> auta <- read.csv2('samochody.csv')
+
+Sprawdzam wymiar danych
+> dim(auta)
+
+155 11
+
+155 - liczba obserwacji<br>
+11 - liczba zmiennych
+
+<br>
+Wyświetlenie danych w postaci tabeli
+
+> View(auta)
+
+#### b)
+
+Podsumowanie wartości
+>summary(auta)
+
+Funkcja, która na każdej kolumnie (dla każdej zmiennej) wywołuje daną funkcję. Sprawdzamy typ każdej kolumny na naszej ramce danych.
+
+>sapply(auta, typeof)
+
+Aby wyświetlić wartości konkretnej kolumny należy użyć polecenia:
+
+>auta$producent
+
+Zmiana typu producenta na factor
+
+> auta$producent <- factor(auta$producent)
+
+Sprawdzamy dostępne poziomy czynnika
+
+>levels(auta$producent)
+
+Sprawdzamy, czy kolumna jest czynnikiem (factor)
+
+> is.factor(auta$producent)
+
+Faktorom można nazwać różne wartości
+
+> levels(auta$producent) <- c('A', 'E', 'J')
+
+powoduje to podmianę wartości dla faktoru
+
+#### c) 
+*Usuń braki danych w utworzonej ramce danych – funkcja na.omit().*
+
+Aby usunąć samochody, które na którejkolwiek wartości mają brak danych używamy funkcji
+
+> auta <- na.omit(auta)
+
+
+#### d) 
+*Zmienna mpg opisuje zużycie paliwa w liczbie mil przejechanych na 1 galonie. Utwórz zmienną zp opisującą zużycie paliwa mierzone w litrach na 100 kilometrów.*
+
+*Wskazówka: <br>
+1 mila = 1609 m <br>
+1 galon (amerykański) = 3,785 l*
+
+Przypisuje do zmiennej zp w auta nową wartość
+
+> auta$zp <- (100 * 3.785) / (auta$mpg * 1.609) 
+
+#### e) 
+
+*Utwórz histogram dla zmiennej zp – funkcja hist(). Jak zmienia się kształt histogramu przy różnych liczbach klas (parametr breaks)?*
+
+Tworzymy histogram za pomocą funkcji: 
+> hist(auta$zp, col=3)
+
+Histogram pocięty na 5 klas
+
+> hist(auta$zp, breaks=5)
+
+Histogram pocięty na 20 klas
+
+> hist(auta$zp, breaks=20)
+
+Dla lepszej prezentacji histogramów można użyć polecenia
+> par(mfrow=c(2,2))
+
+które tworzy okno 2x2, aby zmieścić 4 histogramy na 1 ekranie.
+
+Histogramy można konfigurować co do widoczności danych, zakresów etc.
+
+
+#### f) 
+
+*Utwórz wykres łodygowo-liściowy – funkcja stem().*
+
+Aby utworzyć wykres łodygowo-liściowy należy użyć polecenia
+>stem(auta$zp)
