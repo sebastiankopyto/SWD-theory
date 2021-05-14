@@ -259,6 +259,20 @@ powoduje to podmianę wartości dla faktoru
 #### c) 
 *Usuń braki danych w utworzonej ramce danych – funkcja na.omit().*
 
+Aby sprawdzić ile jest braków w wektorze należy użyć funkcji
+
+> is.na(c(4,NA,6.7))
+
+Suma braków:
+
+> sum(is.na(c(4,NA,6.7)))
+
+
+Sprawdzenie liczby braków na całym zbiorze danych
+
+> sapply(auta, function(n) sum(is.na(n)))
+
+
 Aby usunąć samochody, które na którejkolwiek wartości mają brak danych używamy funkcji
 
 > auta <- na.omit(auta)
@@ -280,7 +294,9 @@ Przypisuje do zmiennej zp w auta nową wartość
 *Utwórz histogram dla zmiennej zp – funkcja hist(). Jak zmienia się kształt histogramu przy różnych liczbach klas (parametr breaks)?*
 
 Tworzymy histogram za pomocą funkcji: 
-> hist(auta$zp, col=3)
+> hist(auta$zp, col=3, labels = TRUE)
+
+col = kolor
 
 Histogram pocięty na 5 klas
 
@@ -298,9 +314,93 @@ które tworzy okno 2x2, aby zmieścić 4 histogramy na 1 ekranie.
 Histogramy można konfigurować co do widoczności danych, zakresów etc.
 
 
+<br>
+
+Histogram można przypisać do zmmiennej
+
+> H <- hist(auta$zp, col=3, labels = TRUE)<br>
+> length(H$counts) - liczba klas
+
+<br>
+Moda = najczęściej występujące wartości, maksima lokalne
+
+Jeśli istnieją 2 maksima lokalne (np. między 6 a 7 oraz między 10 a 11) wykres nazywamy dwumodalnym.
+
+Określenia: prawostronnie skośny, lewostronnie skośny.
+
+
 #### f) 
 
 *Utwórz wykres łodygowo-liściowy – funkcja stem().*
 
 Aby utworzyć wykres łodygowo-liściowy należy użyć polecenia
 >stem(auta$zp)
+
+Wykres łodygowo-liściowy
+
+   5 | 03334578<br>
+   6 | 0002222223344455555555677888999999<br>
+   7 | 0001222333334444445566667788999<br>
+   8 | 0123444446666677778889<br>
+   9 | 0133447788899<br>
+  10 | 01255799<br>
+  11 | 1344556666689<br>
+  12 | 113333679<br>
+  13 | 003444889<br>
+  14 | 35<br>
+  15 | 2<br>
+
+Po lewej stronie część całości, po prawej liczba po przecinku (zaokrąglona do 1 miejsca)
+
+
+
+#### g)
+*Oblicz i zinterpretuj podstawowe statystyki próbkowe dla danych opisujących zużycie paliwa (takie jak: średnia, 
+mediana, kwartyle, 10. i 90. percentyl, wartości ekstremalne, wariancja, odchylenie standardowe, rozstęp, rozstęp międzykwartylowy, współczynnik asymetrii, kurtoza, współczynnik zmienności) – np. funkcje mean(), median(), 
+quantile(), min(), max(), range(), var(), sd(), IQR(), skewness(), kurtosis().*
+
+
+>mean(auta$zp) #średnia, <br>
+>median(auta$zp) #mediana, <br>
+>quantile(auta$zp) #kwartyle, <br>
+>quantile(auta$zp, c(0.1, 0.9)) #10. i 90. percentyl, <br>
+>min(auta$zp); max(auta$zp) #wartości ekstremalne, <br>
+>range(auta$zp) <br>
+>var(auta$zp) #wariancja, <br>
+>sd(auta$zp) #odchylenie standardowe, <br>
+>diff(range(auta$zp)) #rozstęp, <br>
+>IQR(auta$zp) #rozstęp międzykwartylowy, <br>
+
+>install.packages('e1071') - instalacja pakietu<br>
+>library(e1071) - ładowanie pakietu - za każdym uruchomieniem<br>
+>skewness(auta $zp) - współczynnik asymetrii (przyjmuje wartości pomiędzy -1 a 1 NAJCZĘŚCIEJ, jeśli 0 to wykres jest symetryczny, jeśli bliżej 1 lub -1 to wykres skośny, jeśli + to prawostronny, jeśli - to lewostronny), <br>
+>kurtosis(auta $zp) - kurtoza, <br>
+
+>mean(auta$zp) / sd(auta $zp) współczynnik zmienności - zróżnicowanie próby<br>
+
+
+#### h)
+*Utwórz wykres skrzynkowy (ramkowy, pudełkowy) dla zmiennej opisującej zużycie paliwa – funkcja boxplot().*
+
+Tworzenie wykresu skrzynkowego
+
+> boxplot(auta$zp)
+
+**Znaczenia:** <br>
+gruba kreska w środku skrzynki - mediana<br>
+Początek skrzynki na dole - kwartyl 1<br>
+Koniec skrzynki na górze - kwartyl 3<br>
+"Wąsy" czyli końce poza boksem - minimum i maksimum<br>
+W lewym wąsie znajduje się 25% obserwacji, w prawym - 25% obserwacji<br>
+
+<br>
+
+Wykres poziomy:
+>boxplot(auta$zp, horizontal = TRUE, col="blue") 
+
+Naniesienie punktów na wykres
+>points(auta$zp, rnorm(150, 1, 0.02))
+
+Generuje 150 punktów wokół 1 z rozrzutem 0.02 (odchylenie standardowe) z rozkładu normalnego
+
+>rnorm(150, 1, 0.02)
