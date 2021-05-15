@@ -409,8 +409,6 @@ Generuje 150 punktów wokół 1 z rozrzutem 0.02 (odchylenie standardowe) z rozk
 #### Interpretacja
 
 * Średnie zużycie paliwa wynosi 8,8 l/100km z odchyleniem standardowym 2,43 l/100km. 
-
-
 * Najmniejsze zużycie to 5l/100km, a największe 15.2l/100km. 
 * Dla co najmniej 50% aut zużycie paliwa jest nie większe niż 8.1 l/100km i jednocześnie dla co najmniej 50% 
 aut zużycie paliwa jest nie mniejsze niż 8.1 l/100km. 
@@ -420,3 +418,60 @@ najmniej 75% aut zużycie paliwa jest nie mniejsze niż 6,9 l/100km.
 zużycie paliwa jest nie mniejsze niż 10,4 l/100km. 
 * Dla co najmniej 10% aut spalanie jest nie mniejsze niż 12.3 l/100km (90.percentyl). 
 * Rozkład zużycia paliwa jest rozkładem prawostronnie skośnym – co jest widoczne na histogramie i wykresie skrzynkowym (wolniej opadające prawe ramię, dłuższy prawy wąs, mediana przesunięta w lewo) oraz dodatnia wartość skośności. 
+
+Ad. średnia
+Średnia i jej połączenie z odchyleniem (czyli średnie zużycie paliwa wynosi 8,8 +/- 2,43l) jest prawdziwe gdy wykres jest symetryczny lub lekko skośny. Natomiast jeśli rozkład jest skośny już nie do końca. Jeśli rozkład jest silnie skośny, lepiej jest liczyć medianę (zamiast średniej) oraz IQR (zamiast odchylenia).
+
+Ad. Q2, Q3, Q1, Q0,90 (3,4,5,6) 
+
+
+### Zadanie 3
+
+#### a) 
+
+*Utworzenie zmiennej zp_kat opisującej kategorię zużycia paliwa*
+
+>auta$zp_kat[auta $zp <=7 ] <- 'mało
+
+>auta$zp_kat[auta $zp > 7 && auta $zp <= 10 ] <- 'mało
+
+>auta$zp_kat[auta $zp > 10 ] <- 'dużo
+
+#### b) 
+
+*Zliczenie kategorii (poziomów) czynnika zp_kat*
+
+> table(auta$zp_kat)
+
+Jeśli chcemy nadać inny porządek kategoriom czynnika, można wykonać polecenie
+
+>auta$zp_kat <- factor(auta $zp_kat, ordered=TRUE, levels=c('mało', 'średnio', 'dużo'))
+
+>table(auta$zp_kat)
+
+
+Obliczenie udziałów procentrowych poszczególnych kategorii czynnika zp_kat
+
+>prop.table(table(auta$zp_kat)) - odsetki<br>
+>prop.table(table(auta$zp_kat))*100 - procenty
+
+Wykres słupkowy
+
+>barplot(table(auta$zp_kat), col=5:7, ylab='liczba aut', xlab = 'kategoria spalania')
+
+Wykres kołowy
+
+>pie(table(auta$zp_kat), col=5:7)
+
+
+### Zadanie 4
+
+Funkcja tapply(), dla której pierwszym argumentem jest wektor liczbowy, drugim - wektor lub czynnik określający 
+grupy, trzecim funkcja, która zostanie wyznaczona na wektorze liczbowym względem grup, np. średnia i odchylenie 
+standardowe zużycia paliwa względem producenta:
+
+> tapply(auta$zp, auta$producent, mean) # 9.847964 7.933492 7.214859
+> 
+> tapply(auta$zp, auta$producent, sd) # 2.352059 2.564224 1.259573 
+> 
+> boxplot(auta$zp~auta$producent, col=2:4) 
