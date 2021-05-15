@@ -404,3 +404,19 @@ Naniesienie punktów na wykres
 Generuje 150 punktów wokół 1 z rozrzutem 0.02 (odchylenie standardowe) z rozkładu normalnego
 
 >rnorm(150, 1, 0.02)
+
+
+#### Interpretacja
+
+* Średnie zużycie paliwa wynosi 8,8 l/100km z odchyleniem standardowym 2,43 l/100km. 
+
+
+* Najmniejsze zużycie to 5l/100km, a największe 15.2l/100km. 
+* Dla co najmniej 50% aut zużycie paliwa jest nie większe niż 8.1 l/100km i jednocześnie dla co najmniej 50% 
+aut zużycie paliwa jest nie mniejsze niż 8.1 l/100km. 
+* Dla co najmniej 25% samochodów zużycie wyniosło nie więcej niż 6,9 l/100km (Q1) i jednocześnie dla co 
+najmniej 75% aut zużycie paliwa jest nie mniejsze niż 6,9 l/100km. 
+* Dla co najmniej 75% aut zużycie nie przekracza 10,4 i/100km (Q3) i jednocześnie dla co najmniej 25% aut 
+zużycie paliwa jest nie mniejsze niż 10,4 l/100km. 
+* Dla co najmniej 10% aut spalanie jest nie mniejsze niż 12.3 l/100km (90.percentyl). 
+* Rozkład zużycia paliwa jest rozkładem prawostronnie skośnym – co jest widoczne na histogramie i wykresie skrzynkowym (wolniej opadające prawe ramię, dłuższy prawy wąs, mediana przesunięta w lewo) oraz dodatnia wartość skośności. 
