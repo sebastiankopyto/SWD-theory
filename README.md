@@ -475,3 +475,160 @@ standardowe zużycia paliwa względem producenta:
 > tapply(auta$zp, auta$producent, sd) # 2.352059 2.564224 1.259573 
 > 
 > boxplot(auta$zp~auta$producent, col=2:4) 
+
+----
+
+## Zajęcia 2
+
+X ∼ N(µ, σ), σ - wartość populacyjna
+
+### Zadanie 1
+
+*Średnie wynagrodzenie 50 losowo wybranych programistów wyniosło 6000 zł. Wiadomo, ze odchylenie standardowe wynagrodzenia programistów wynosi 2100 zł. Wyznacz 95% przedział ufnosci dla sredniego wynagrodzenia programistów, zakładając, ze rozkład ich wynagrodzeń jest rozkładem normalnym.*
+
+*Wyznacz 95% przedział ufności dla średniego* - przedział ufności dla średniej µ
+
+6000zł = x¯  - średnia
+
+*Wiadomo, że odchylenie standardowe wynagrodzenia programistów wynosi 2100 zł.* - wiadomo ogólnie, nie z próby.
+
+σ znane, bo informacja wyżej.
+
+> X - wynagrodzenie programistów w zł<br>
+> X ~N(mu, sigma), sigma=2100<br>
+> średnia w próbie = 6000<br>
+> n = 50<br>
+> 1-alpha = 0.95, alpha = 0.05<br>
+> 95%CI dla średniego wynagrodzenia wszystkich programistów > Model 1<br>
+> z.text() - brak surowych danych, więc trzeba ze wzoru <br><br>
+> z <- qnorm(1-0.05/2) - kwartyl rzędu 1-alpha/2 rozkładu N(0,1)<br>
+> 6000 - z*2100/sqrt(50); 6000 + z*2100/sqrt(50)<br>
+> Odp: [5417.92, 6582.08]zł<br>
+> mamy 95% pewności, że średnie wynagrodzenie wszystkich programistów mieści się w tym przedziale<br>
+
+
+
+### Zadanie 2
+
+*Dla wybranego uzytkownika zarejestrowano czasy między naciśnięciami klawiszy, gdy wpisywał login i hasło. Pobrano z nich losową próbę 18 pomiarów (w sekundach):*
+
+*0.24, 0.22, 0.26, 0.34, 0.35, 0.32, 0.33, 0.29, 0.19, 0.36, 0.30, 0.15, 0.17, 0.28, 0.38, 0.40, 0.37, 0.27.<br>
+<br>
+Zakładając, ze czasy pochodzą z rozkładu normalnego, wyznacz<br>
+a) 99% przedział ufnosci dla średniego czasu między naciśnięciami klawiszy tego użytkownika,<br>
+b) 95% przedział ufnosci dla odchylenia standardowego czasu między naciśnięciami klawiszy tego użytkownika.*
+
+
+> X - czas między naciśnięciami klawiszy [s]<br>
+> X ~ N(mi, sigma), sigma - nieznane<br>\
+> czas <- c(.24, .22, .26, .34, .35, .32, .33, .29, .19, .36, .30, .15, .17, .28, .38, .40, .37, .27)<br>
+> <br><br>
+> 99%CI dla średniej >> Model 2
+> <br><br>
+> t.test(czas)<br>
+> CI - Confidence Interval - przedział ufności<br>
+> t.test(czas, conf.level = 0.99)$conf.int<br>
+> 
+> odp: [0.2394741, 0.3405259] w [s]<br>
+> 95% CI dla odchylenia standardowego<br>
+> install.packages('TeachingDemos')<br>
+> library(TeachingDemos)<br><br>
+> sigma.test(czas, conf.level = 0.95)$conf.int - zwraca przedział dla wariancji!<br>
+> 
+> sqrt(sigma.test(czas, conf.level = 0.95)$conf.int)<br>
+
+
+
+## Zadanie 3
+
+ *Zmierzono czas swiecenia 69 świetlówek i stwierdzono, że dla 14 z nich był on krótszy niż 1000 godzin, dla 15 był w przedziale [1000, 2000), dla 29 swietlówek był dłuższy niż 2000, ale krótszy niz 3000 godzin, zaś dla pozostałych 11 - czas swiecenia był dłuższy nią 3000, ale nie dłuższy niż 4000 godzin. Oszacuj przedziałowo srednią i odchylenie
+standardowe czasu swiecenia swietlówek. Przyjmij poziom ufności 0.95.*
+
+
+> dane zagregowane (szereg rozdzielczy)<br>
+> liczność     czas_świecenia<br>
+> 14     0-1000<br>
+> 15 1000-2000<br>
+> 29 2000-3000<br>
+> 11 3000-4000<br>
+> <br>
+> X - czas świecenia świetlówek w h, X ~ nieznany rozkład, n=69
+> <br><br>
+> srodki <- c(500, 1500, 2500, 3500)<br>
+> licznosci <- c(14, 15, 29, 11)<br>
+> n <- sum(licznosci)<br><br>
+> srednia w szeregu rozdzielczym:<br>
+> srednia <- sum(srodki*licznosci)/n<br><br>
+> odchylenie standardowe w szeregu rozdzielczym:<br>
+> S <- sqrt(sum(licznosci * (srodki - srednia)^2)/(n-1))<br><br>
+> alpha <- 0.05<br>
+> <br>
+> 95% CI dla średniej >> Model 3<br>
+> srednia - qnorm(1-alpha/2)*S/sqrt(n); srednia + qnorm(1-alpha/2)*S/sqrt(n)<br>
+> <br>
+> Odp: [1801.743, 2270.721] w [h]
+> <br><br>
+> 95% CI dla odch.std.<br>
+> CI_sigma_M2 <- function(n, S, alpha=0.05) {<br>
+> L <- sqrt(2 * n-2)*S/(sqrt(2 * n-3)+qnorm(1-alpha/2))<br>
+> P <- sqrt(2 * n-2)*S/(sqrt(2 * n-3)*+*qnorm(1-alpha/2))<br>
+> c(L,P)<br>
+> }<br><br>
+> CI_sigma_M2(69, S)<br>
+> CI_sigma_M2(69, S, 0,01)<br><br>
+> lub tak
+> <br><br>
+> sqrt(2 * n-2)*S/(sqrt(2 * n-3)+qnorm(1-alpha/2))
+> sqrt(2 * n-2)*S/(sqrt(2 * n-3)-qnorm(1-alpha/2))
+> <br><br>
+
+----
+
+### Zadanie 5
+
+*Ramka danych Pima.te z pakietu MASS zawiera dane dotyczące zdrowia kilkuset Indianek z plemienia Pima mających co najmniej 21 lat. Zmienna type zawiera informację, czy kobieta jest chora na cukrzycę, czy nie.<br>
+a) Utwórz 95% przedział ufnosci dla odsetka Indianek dotkniętych cukrzycą.<br>
+b) Utwórz 95% przedział ufnosci dla odsetka Indianek dotkniętych cukrzycą mających co najmniej 35 lat.*
+
+> install.packages('MASS')<br>
+> library(MASS)<br>
+> data(Prima.te)<br>
+> View(Prima.te)<br>
+><br>
+> X - cecha (0/1), x = 1 dotyyczy Indianki z cukrzycą<br>
+> X ~Bern(p), p - nieznane, p=P(X=1)<br>
+
+> k <- sum(Prima.te $type == 'Yes') suma kobiet chorych<br>
+> 
+> n <- length(Prima.te $type) ogólna liczba kobiet<br>
+> 
+> prop.text(k,n,conf.level = 0.95)$conf.int
+> <br><br>
+> Odp: [0.2785847, 0.3820858]<br>
+> Mamy 95% pewności, że odsetek kobiet chorych na cukrzycę w tej populacji wynosi od 27.9% do 38.2%<br>
+> <br>
+> Y - cecha (0/1), Y=1 dotyuczy Indianki 35+ z cukrzycą<br>
+> Y ~ Bern(p), p - nieznane<br>
+> <br>
+> k <- sum(Pima.te $type == 'Yes' & Pima.te $age >= 35) kobiety chore na cukrzyce, które są po 35<br>
+> n <- sum(Pima.te $age >= 35) Kobiety po 35+<br><br>
+> prop.test(k, n, conf.level = 0.95) $conf.int<br>
+> odp [0.4189563, 0.6187654] <br>
+> <br>
+> U starsyzch kobier ryzyko zahcowania jest większe niż u ogółu <br>
+
+### Zadanie 7
+
+*Jak duz ˛a prób˛e nale ˙ zy pobra ˙ c, aby z maksymalnym bł˛edem ´ ±2% oszacowac na poziomie ufno ´ sci 0.99 procent kie- ´
+rowców, którzy nie zapinaj ˛a pasów bezpieczenstwa? Uwzgl˛ednij rezultaty wst˛epnych bada ´ n, z których wynika, ´ ze˙
+interesuj ˛aca nas wielkos´c jest rz˛edu 16%. Porównaj otrzyman ˛a liczno ´ s´c próby z liczno ´ sci ˛a, jaka byłaby wymagana, ´
+gdyby pomin ˛ac rezultaty wst˛epnych bada ´ n.*
+
+<br><br>
+
+> d <- 0.02 - 2% maksymalny błąd<br>
+> alpha <- 0.0.1<br>
+> p0 <- 0.16<br><br>
+> minN <- p0*(1-p0)*qnorm(1-alpha/2)/d)^2 - znane p0, czyli minN = 2230<br>
+> minN <- (qnorm(1-alpha/2)/(2*d))^ - nieznane p0, czyli minN = 4147<br>
+> 
